@@ -1,0 +1,19 @@
+# In your backend folder, create .gitignore file
+# backend/.gitignore
+
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+uploads/
+temp/
+.DS_Store
+Thumbs.db
