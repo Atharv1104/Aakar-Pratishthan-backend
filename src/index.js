@@ -21,6 +21,7 @@ app.use(helmet());
 
 const allowedOrigins = [
   process.env.CORS_ORIGIN,
+  'https://hoppscotch.io',
   'http://localhost:5173', // dev frontend
   'https://aakarpratishthan.in' //Netlify URL
 ];
