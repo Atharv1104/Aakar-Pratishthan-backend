@@ -20,6 +20,7 @@ const app = express();
 app.use(helmet());
 
 const allowedOrigins = [
+  process.env.CORS_ORIGIN,
   'http://localhost:5173', // dev frontend
   'https://aakarpratishthan.in' //Netlify URL
 ];
@@ -40,24 +41,24 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRouter);
 
-app.use('/api/contact',protect, contactRouter);
-app.use('/api/donation',protect, donationRouter);   
-app.use('/api/events',protect, eventsRouter);
-app.use('/api/volunteer',protect, VolunteerRouter);
-app.use('/api/news',protect, newsRouter);
-app.use('/api/dashboard',protect, dashboardRouter);
+app.use('/api/contact', protect, contactRouter);
+app.use('/api/donation', protect, donationRouter);
+app.use('/api/events', protect, eventsRouter);
+app.use('/api/volunteer', protect, VolunteerRouter);
+app.use('/api/news', protect, newsRouter);
+app.use('/api/dashboard', protect, dashboardRouter);
 const { MONGODB_URI = 'mongodb://127.0.0.1:27017/aakar', PORT = 4000 } = process.env;
 
 mongoose.connect(MONGODB_URI)
-.then(() => console.log('Mongo connected'))
-.catch(err => { console.error('Mongo connect error', err); process.exit(1); });
+  .then(() => console.log('Mongo connected'))
+  .catch(err => { console.error('Mongo connect error', err); process.exit(1); });
 
 
 app.get('/api/health', (req, res) => {
-    res.json({
-        message:'Aakar pratishthan API is running',
-        timestamp:new Date().toISOString()
-    })
+  res.json({
+    message: 'Aakar pratishthan API is running',
+    timestamp: new Date().toISOString()
+  })
 });
 
 app.use(errorHandler);
