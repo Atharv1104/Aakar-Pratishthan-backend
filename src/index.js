@@ -47,11 +47,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRouter);
 
-app.use('/api/contact', protect, contactRouter);
-app.use('/api/donation', protect, donationRouter);
-app.use('/api/events', protect, eventsRouter);
-app.use('/api/volunteer', protect, VolunteerRouter);
-app.use('/api/news', protect, newsRouter);
+app.use('/api/contact', contactRouter);
+app.use('/api/donation',donationRouter);
+app.use('/api/events',  eventsRouter);
+app.use('/api/volunteer', VolunteerRouter);
+app.use('/api/news',  newsRouter);
 app.use('/api/dashboard', protect, dashboardRouter);
 const { MONGODB_URI = 'mongodb://127.0.0.1:27017/aakar', PORT = 4000 } = process.env;
 

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Event from "../models/Event.model.js";
 import { uploadEvent, cloudinary } from "../config/cloudconfig.js";
+import { protect } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // POST route is updated to handle new fields
-router.post("/", uploadEvent.array('images', 5), async (req, res, next) => {
+router.post("/", protect, uploadEvent.array('images', 5), async (req, res, next) => {
     try {
         // --- 1. Destructure all new bilingual fields from req.body ---
         const {
@@ -60,7 +61,7 @@ router.post("/", uploadEvent.array('images', 5), async (req, res, next) => {
 });
 
 // DELETE route remains the same
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id",protect, async (req, res, next) => {
     try {
         const { id } = req.params;
         const deletedEvent = await Event.findByIdAndDelete(id);

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import Doner from '../models/donation.model.js';
+import { protect } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
@@ -29,7 +30,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // DELETE /api/admin/donation/:id (Protected by index.js)
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id',protect, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deleted = await Doner.findByIdAndDelete(id);
