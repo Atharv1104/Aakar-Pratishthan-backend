@@ -1,5 +1,4 @@
-# In your backend folder, create .gitignore file
-# backend/.gitignore
+
 
 node_modules/
 .env

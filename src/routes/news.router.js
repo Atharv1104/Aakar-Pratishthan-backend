@@ -29,7 +29,7 @@ router.post("/",protect, uploadNews.single('image'), async (req, res, next) => {
         next(error); 
     }
 });
-
+    
 // GET: Fetches all news images
 router.get("/", async (req, res, next) => {
     try {

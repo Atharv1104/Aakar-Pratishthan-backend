@@ -2,25 +2,25 @@ import { Router } from "express";
 import Volunteer from '../models/volunteer.model.js'
 
 const router = Router();
-//create
-router.post('/', async (req, res) => {
-    try {
 
+// Create
+// FIX: Added 'next' parameter
+router.post('/', async (req, res, next) => {
+    try {
         const event = await Volunteer.create(req.body);
         res.status(201).json({
             message: "Volunteer form submitted successfully",
             id: event.id,
             event
         });
-
-
     } catch (error) {
         next(error);
     }
-
 })
-//Read All
-router.get('/', async (req, res) => {
+
+// Read All
+// FIX: Added 'next' parameter
+router.get('/', async (req, res, next) => {
     try {
         const { status, category, limit } = req.query;
         const query = {};
@@ -28,28 +28,32 @@ router.get('/', async (req, res) => {
         if (category) query.category = category;
 
         const events = await Volunteer.find(query)
-            .sort({ date: -1 })
+            .sort({ createdAt: -1 }) // Sorted by createdAt usually better than date
             .limit(limit ? parseInt(limit) : 0);
 
+        // Note: You are returning 'events', but frontend might expect 'volunteers'.
+        // This is why your frontend needs `data.events`.
         res.json({
             message: 'Volunteer retrieved successfully',
             count: events.length,
-            events
+            events 
         });
 
     } catch (error) {
         next(error);
     }
 })
-//Read Specific
-router.get('/:id', async (req, res) => {
+
+// Read Specific
+// FIX: Added 'next' parameter
+router.get('/:id', async (req, res, next) => {
     try {
         const event = await Volunteer.findById(req.params.id)
         if (!event) {
-            return res.status(404).json({ message: 'Event not found' })
+            return res.status(404).json({ message: 'Volunteer not found' })
         }
         res.json({
-            message: 'Event retrieved successfully',
+            message: 'Volunteer retrieved successfully',
             event
         })
     } catch (error) {
@@ -57,8 +61,10 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-//Update
-router.patch(':id', async (req, res) => {
+// Update
+// FIX 1: Added SLASH before :id
+// FIX 2: Added 'next' parameter
+router.patch('/:id', async (req, res, next) => { 
     try {
         const event = await Volunteer.findByIdAndUpdate(
             req.params.id,
@@ -67,34 +73,36 @@ router.patch(':id', async (req, res) => {
         )
         if (!event) {
             return res.status(404).json({
-                messaage: 'Event not found'
+                message: 'Volunteer not found'
             })
         }
         res.json({
-            message: 'Event updated successfully',
+            message: 'Volunteer updated successfully',
             event
         });
     } catch (error) {
         next(error);
     }
 })
-//delete
-router.delete('/:id', async (req, res) => {
+
+// Delete
+// FIX: Added 'next' parameter
+router.delete('/:id', async (req, res, next) => {
     try {
         const event = await Volunteer.findByIdAndDelete(
             req.params.id
         )
         if (!event) {
-            return res.status(400).json({
-                message: 'Volunteer does not exists with this id'
+            return res.status(404).json({ // Changed 400 to 404 for not found
+                message: 'Volunteer does not exist with this id'
             });
         }
         return res.status(200).json({
-            message: 'Volunteer deleted successfully '
+            message: 'Volunteer deleted successfully'
         })
     } catch (error) {
         next(error);
     }
-
 })
-export default router
+
+export default router;
